@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oakwell Primary School</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .nav button {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .nav button:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .page {
+            display: none;
+            background: rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .staff-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .staff-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 48px;
+        }
+
+        .form-group {
+            margin: 15px 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.9);
+            color: #333;
+        }
+
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .btn-danger {
+            background: #f44336;
+        }
+
+        .btn-danger:hover {
+            background: #da190b;
+        }
+
+        .events-list {
+            margin: 20px 0;
+        }
+
+        .event-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .dashboard-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .dashboard-card:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .tickets-list {
+            margin: 20px 0;
+        }
+
+        .ticket-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .timetable-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 2px;
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .timetable-cell {
+            background: rgba(255,255,255,0.9);
+            color: #333;
+            padding: 10px;
+            text-align: center;
+            min-height: 60px;
+            border-radius: 4px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1e3c72;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80%;
+            overflow-y: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .year-groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .year-group-btn {
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .year-group-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏫 Oakwell Primary School</h1>
+            <p>Excellence in Education</p>
+        </div>
+
+        <nav class="nav">
+            <button onclick="showPage('home')">Home</button>
+            <button onclick="showPage('about')">About</button>
+            <button onclick="showPage('events')">Events</button>
+            <button onclick="showPage('support')">Support</button>
+            <button onclick="showPage('staff-login')">Staff Login</button>
+        </nav>
+
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <h2>Welcome to Oakwell Primary School</h2>
+			
+            <p>Welcome to our vibrant learning community where every child is valued and encouraged to reach their full potential.</p>
+            <p>Our school, is inline with all of the expectations a school has. We are rated top 5 in ro-schooling!</p>
+			<br>
+            <h3>Our Featured Staff</h3>
+            <div class="staff-grid">
+                <div class="staff-card">
+                    <div class="staff-card img">👩‍🏫</div>
+					<br>
+                    <h4>Mr. Oliver Larson</h4>
+                    <p><strong>Executive Headteacher</strong></p>
+                    <p>The owner and founder of Oakwell Primar School!</p>
+                </div>
+				
+                <div class="staff-card">
+                    <div class="staff-card img">👨‍🏫</div>
+					<br>
+                    <h4>Mr. William Oyston</h4>
+                    <p><strong>Headteacher</strong></p>
+                    <p>Mr. Oyston specializes in curriculum development and ensuring high standards across all year groups.</p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👩‍🏫</div>
+					<br>
+                    <h4>Mrs. Jaycee Revell</h4>
+                    <p><strong>Deputy Headteacher</strong></p>
+                    <p>Mrs. Revell is dedicated to preparing our Year 6 students for their transition to secondary school.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <h2>About Oakwell Primary School</h2>
+            <p>Founded in 2025, Oakwell Primary School set off. Created byyyy a group of staff striving to make the best school for student to learn and compete.</p>
+            <br>
+            <h3>Our Mission</h3>
+            <p>To provide outstanding education that inspires lifelong learning, creativity, and character development in every child.</p>
+            <br>
+            <h3>Our Middle and Senior Leadership Team</h3>
+            <div class="staff-grid">
+                <div class="staff-card">
+                    <div class="staff-card img">👩‍🏫</div>
+					<br>
+                    <h4>Mr. Oliver Larson</h4>
+                    <p><strong>Executive Headteacher</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👨‍🏫</div>
+					<br>
+                    <h4>Mr. William Oyston</h4>
+                    <p><strong>Headteacher</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👩‍🏫</div>
+					<br>
+                    <h4>Mrs. Jaycee Revell</h4>
+                    <p><strong>Deputy Headteacher</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👨‍🏫</div>
+					<br>
+                    <h4>Vacant....</h4>
+                    <p><strong>Assistant Headteacher</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👩‍🏫</div>
+					<br>
+                    <h4>Vacant....</h4>
+                    <p><strong>Assistant Headteacher</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👨‍🏫</div>
+					<br>
+                    <h4>Mr. Tom Hampton</h4>
+                    <p><strong>Site Technician</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👩‍🏫</div>
+					<br>
+                    <h4>Vacant....</h4>
+                    <p><strong>Key Stage 1 Director</strong></p>
+                </div>
+                <div class="staff-card">
+                    <div class="staff-card img">👨‍🏫</div>
+					<br>
+                    <h4>Vacant....</h4>
+                    <p><strong>Key Stage 2 Director</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events Page -->
+        <div id="events" class="page">
+            <h2>School Events</h2>
+            <div id="events-list" class="events-list">
+                <div class="event-item">
+                    <h4>School Sports Day</h4>
+                    <p><strong>Date:</strong> 2025-10-15 at 10:00</p>
+                    <p><strong>Location:</strong> School Field</p>
+                    <p>Join us for our annual sports day celebration with activities for all year groups!</p>
+                </div>
+                <div class="event-item">
+                    <h4>Parent-Teacher Conferences</h4>
+                    <p><strong>Date:</strong> 2025-10-22 at 16:00</p>
+                    <p><strong>Location:</strong> Main Hall</p>
+                    <p>Schedule your appointment to discuss your child's progress with their teacher.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Page -->
+        <div id="support" class="page">
+            <div id="support-login">
+                <h2>Student Support Portal</h2>
+                <p>Please log in with your student account to access support services.</p>
+                
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="student-username" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="student-password" placeholder="Enter your password">
+                </div>
+                <button class="btn" onclick="loginStudent()">Login</button>
+                <button class="btn" onclick="showCreateAccount()">Create Account</button>
+            </div>
+
+            <div id="create-account" class="hidden">
+                <h3>Create Student Account</h3>
+                <div class="form-group">
+                    <label>Full Name:</label>
+                    <input type="text" id="new-student-name" placeholder="Enter your full name">
+                </div>
+                <div class="form-group">
+                    <label>Year Group:</label>
+                    <select id="new-student-year">
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                        <option value="5">Year 5</option>
+                        <option value="6">Year 6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="new-student-username" placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="new-student-password" placeholder="Choose a password">
+                </div>
+                <button class="btn" onclick="createStudentAccount()">Create Account</button>
+                <button class="btn" onclick="showSupportLogin()">Back to Login</button>
+            </div>
+
+            <div id="support-dashboard" class="hidden">
+                <h3>Support Dashboard</h3>
+                <button class="btn" onclick="showCreateTicket()">Create New Ticket</button>
+                <button class="btn" onclick="showMyTickets()">My Tickets</button>
+                <button class="btn" onclick="logoutStudent()">Logout</button>
+
+                <div id="create-ticket-form" class="hidden">
+                    <h4>Create Support Ticket</h4>
+                    <div class="form-group">
+                        <label>Subject:</label>
+                        <input type="text" id="ticket-subject" placeholder="Brief description of your issue">
+                    </div>
+                    <div class="form-group">
+                        <label>Message:</label>
+                        <textarea id="ticket-message" placeholder="Describe your issue in detail"></textarea>
+                    </div>
+                    <button class="btn" onclick="createTicket()">Submit Ticket</button>
+                </div>
+
+                <div id="my-tickets"></div>
+            </div>
+        </div>
+
+        <!-- Staff Login Page -->
+        <div id="staff-login" class="page">
+            <h2>Staff Login Portal</h2>
+            <div class="form-group">
+                <label>Username:</label>
+                <input type="text" id="staff-username" placeholder="Enter your username">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="staff-password" placeholder="Enter your password">
+            </div>
+            <button class="btn" onclick="loginStaff()">Login</button>
+        </div>
+
+        <!-- Staff Dashboard -->
+        <div id="staff-dashboard" class="page">
+            <h2>Staff Dashboard</h2>
+            <div class="dashboard">
+                <div class="dashboard-card" onclick="showLessonPlanning()">
+                    <h4>📚 Lesson Planning</h4>
+                </div>
+                <div class="dashboard-card" onclick="showAnnouncements()">
+                    <h4>📢 Year Group Announcements</h4>
+                </div>
+                <div class="dashboard-card" onclick="showEventManagement()">
+                    <h4>📅 Event Management</h4>
+                </div>
+                <div class="dashboard-card" onclick="showTimetable()">
+                    <h4>📋 My Timetable</h4>
+                </div>
+                <div class="dashboard-card" onclick="showCPOMS()">
+                    <h4>⚠️ CPOMS - Behavior</h4>
+                </div>
+                <div class="dashboard-card" onclick="showFirstAid()">
+                    <h4>🏥 First Aid Report</h4>
+                </div>
+                <div class="dashboard-card" onclick="showSafeguarding()">
+                    <h4>🛡️ Safeguarding</h4>
+                </div>
+                <div class="dashboard-card" onclick="showSLTLogin()">
+                    <h4>👑 SLT Access</h4>
+                </div>
+            </div>
+            <button class="btn btn-danger" onclick="logoutStaff()">Logout</button>
+        </div>
+
+        <!-- SLT Dashboard -->
+        <div id="slt-dashboard" class="page">
+            <h2>Senior Leadership Team Dashboard</h2>
+            <div class="dashboard">
+                <div class="dashboard-card" onclick="showStaffDesktops()">
+                    <h4>👥 Staff Desktops</h4>
+                </div>
+                <div class="dashboard-card" onclick="showPasswordReset()">
+                    <h4>🔐 Password Management</h4>
+                </div>
+                <div class="dashboard-card" onclick="showAllStudents()">
+                    <h4>👨‍🎓 All Students</h4>
+                </div>
+                <div class="dashboard-card" onclick="showSupportTickets()">
+                    <h4>🎫 Support Tickets</h4>
+                </div>
+                <div class="dashboard-card" onclick="showCreateProfiles()">
+                    <h4>➕ Create Profiles</h4>
+                </div>
+            </div>
+            <button class="btn btn-danger" onclick="logoutSLT()">Back to Staff Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Modal for various functions -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global data storage
+        let currentUser = null;
+        let currentStaff = null;
+        let globalData = {
+            students: [],
+            staff: [],
+            events: [],
+            tickets: [],
+            timetables: {},
+            studentProfiles: {}
+        };
+
+        // Initialize default staff accounts (encrypted simulation)
+        const staffAccounts = {
+            'oliver.larson@oakwellprimary.com': { password: 'Watermelon12', name: 'Mr. Oliver Larson', role: 'Executive Headteacher' },
+            'william.oyston@oakwellprimary.com': { password: 'WilliamIsCool', name: 'Mr. William Oston', role: 'Headteacher' },
+            'jaycee.revell@oakwellprimary.com': { password: 'Samisthebest!', name: 'Mrs. Jaycee Revell', role: 'Deputy Headteacher' },
+			'vacant@oakwellprimary.com': { password: 'year6_2024', name: 'Ms. Emma Roberts', role: 'Assistant Headteacher' },
+            'james.brown': { password: 'year5_2024', name: 'Mr. James Brown', role: 'Assistant Headteacher' },
+            'lisa.davis': { password: 'year4_2024', name: 'Mrs. Lisa Davis', role: 'Site Technician' },
+            'vacant@oakwellprimary.com': { password: 'pass14', name: 'Mr. Tom Smith', role: 'Keyy Stage 1 Director' },
+            'vacant@oakwellprimary.com': { password: 'pass13', name: 'Ms. Rachel Green', role: 'Key Stage 2 Director' },
+            'vacant@oakwellprimary.com': { password: 'pass12', name: 'Staff Member 1', role: 'Teacher' },
+            'vacant@oakwellprimary.com': { password: 'pass11', name: 'Staff Member 2', role: 'Teacher' },
+            'vacant@oakwellprimary.com': { password: 'pass10', name: 'Staff Member 3', role: 'Teacher' },
+            'vacant@oakwellprimary.com': { password: 'pass9', name: 'Staff Member 4', role: 'Teacher' },
+            'vacant@oakwellprimary.com': { password: 'pass8', name: 'Staff Member 5', role: 'Teacher' },
+            'vacant@oakwellprimary.com': { password: 'pass7', name: 'Staff Member 6', role: 'Teacher' },
+            'vacant@oakwellprimary.com': { password: 'pass6', name: 'Staff Member 7', role: 'Teaching Assistant' },
+            'vacant@oakwellprimary.com': { password: 'pass5', name: 'Staff Member 8', role: 'Teaching Assistant' },
+            'vacant@oakwellprimary.com': { password: 'pass4', name: 'Staff Member 9', role: 'Teaching Assistant' },
+            'vacant@oakwellprimary.com': { password: 'pass3', name: 'Staff Member 10', role: 'Teaching Assistant' },
+            'vacant@oakwellprimary.com': { password: 'pass2', name: 'Staff Member 11', role: 'Midday Supervisor' },
+            'vacant@oakwellprimary.com': { password: 'pass1', name: 'Staff Member 12', role: 'Office Administrator' }
+        };
+
+        // Page navigation
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Student account functions
+        function showCreateAccount() {
+            document.getElementById('support-login').classList.add('hidden');
+            document.getElementById('create-account').classList.remove('hidden');
+        }
+
+        function showSupportLogin() {
+            document.getElementById('support-login').classList.remove('hidden');
+            document.getElementById('create-account').classList.add('hidden');
+        }
+
+        function createStudentAccount() {
+            const name = document.getElementById('new-student-name').value;
+            const year = document.getElementById('new-student-year').value;
+            const username = document.getElementById('new-student-username').value;
+            const password = document.getElementById('new-student-password').value;
+
+            if (!name || !username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Check if username exists
+            if (globalData.students.find(s => s.username === username)) {
+                alert('Username already exists');
+                return;
+            }
+
+            const student = {
+                id: Date.now(),
+                name: name,
+                year: year,
+                username: username,
+                password: password,
+                tickets: []
+            };
+
+            globalData.students.push(student);
+            alert('Account created successfully!');
+            showSupportLogin();
+        }
+
+        function loginStudent() {
+            const username = document.getElementById('student-username').value;
+            const password = document.getElementById('student-password').value;
+
+            const student = globalData.students.find(s => s.username === username && s.password === password);
+            if (student) {
+                currentUser = student;
+                document.getElementById('support-login').classList.add('hidden');
+                document.getElementById('support-dashboard').classList.remove('hidden');
+                loadMyTickets();
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        function logoutStudent() {
+            currentUser = null;
+            document.getElementById('support-login').classList.remove('hidden');
+            document.getElementById('support-dashboard').classList.add('hidden');
+            document.getElementById('create-ticket-form').classList.add('hidden');
+        }
+
+        function showCreateTicket() {
+            document.getElementById('create-ticket-form').classList.remove('hidden');
+        }
+
+        function createTicket() {
+            const subject = document.getElementById('ticket-subject').value;
+            const message = document.getElementById('ticket-message').value;
+
+            if (!subject || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const ticket = {
+                id: 'TICKET-' + Date.now(),
+                supportID: 'SUP-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+                studentId: currentUser.id,
+                studentName: currentUser.name,
+                subject: subject,
+                message: message,
+                status: 'Open',
+                created: new Date().toLocaleString(),
+                replies: []
+            };
+
+            globalData.tickets.push(ticket);
+            alert('Ticket created with ID: ' + ticket.supportID);
+            document.getElementById('ticket-subject').value = '';
+            document.getElementById('ticket-message').value = '';
+            loadMyTickets();
+        }
+
+        function loadMyTickets() {
+            const myTickets = globalData.tickets.filter(t => t.studentId === currentUser.id);
+            const container = document.getElementById('my-tickets');
+            container.innerHTML = '<h4>My Support Tickets</h4>';
+
+            myTickets.forEach(ticket => {
+                const ticketDiv = document.createElement('div');
+                ticketDiv.className = 'ticket-item';
+                ticketDiv.innerHTML = `
+                    <h5>${ticket.subject} (${ticket.supportID})</h5>
+                    <p><strong>Status:</strong> ${ticket.status}</p>
+                    <p><strong>Created:</strong> ${ticket.created}</p>
+                    <p>${ticket.message}</p>
+                    ${ticket.replies.length > 0 ? '<h6>Staff Replies:</h6>' : ''}
+                    ${ticket.replies.map(reply => `<p><strong>${reply.staff}:</strong> ${reply.message} <small>(${reply.time})</small></p>`).join('')}
+                `;
+                container.appendChild(ticketDiv);
+            });
+        }
+
+        function showMyTickets() {
+            loadMyTickets();
+        }
+
+        // Staff login functions
+        function loginStaff() {
+            const username = document.getElementById('staff-username').value;
+            const password = document.getElementById('staff-password').value;
+
+            if (staffAccounts[username] && staffAccounts[username].password === password) {
+                currentStaff = { username, ...staffAccounts[username] };
+                showPage('staff-dashboard');
+            } else {
+                alert('Invalid staff credentials');
+            }
+        }
+
+        function logoutStaff() {
+            currentStaff = null;
+            showPage('staff-login');
+        }
+		
+		const yearGroupRoles = {
+			'1': 'ROLE_ID_FOR_YEAR_1',
+			'2': '1419317988280238221', 
+			'3': '1419317839395029102',
+			'4': '1419317759271108638',
+			'5': '1419317640597606461',
+			'6': '1419317371461570741'
+		};
+		
+        // Staff dashboard functions
+        function showLessonPlanning() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>Lesson Planning</h3>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="lesson-subject" placeholder="Enter subject">
+                </div>
+                <div class="form-group">
+                    <label>Year Group:</label>
+                    <select id="lesson-year">
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                        <option value="5">Year 5</option>
+                        <option value="6">Year 6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input type="date" id="lesson-date">
+                </div>
+                <div class="form-group">
+                    <label>Lesson Objectives:</label>
+                    <textarea id="lesson-objectives" placeholder="Enter lesson objectives"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Activities:</label>
+                    <textarea id="lesson-activities" placeholder="Describe lesson activities"></textarea>
+                </div>
+                <button class="btn" onclick="saveLessonPlan()">Save Lesson Plan</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function saveLessonPlan() {
+            const lesson = {
+                subject: document.getElementById('lesson-subject').value,
+                year: document.getElementById('lesson-year').value,
+                date: document.getElementById('lesson-date').value,
+                objectives: document.getElementById('lesson-objectives').value,
+                activities: document.getElementById('lesson-activities').value,
+                teacher: currentStaff.name,
+                created: new Date().toLocaleString()
+            };
+
+            if (!globalData.lessonPlans) globalData.lessonPlans = [];
+            globalData.lessonPlans.push(lesson);
+            alert('Lesson plan saved successfully!');
+            closeModal();
+        }
+
+        function showAnnouncements() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>Year Group Announcements</h3>
+                <div class="form-group">
+                    <label>Select Year Group:</label>
+                    <select id="announcement-year">
+                        <option value="6">Year 6</option>
+                        <option value="5">Year 5</option>
+                        <option value="4">Year 4</option>
+                        <option value="3">Year 3</option>
+                        <option value="2">Year 2</option>
+                        <option value="1">Year 1</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Announcement Title:</label>
+                    <input type="text" id="announcement-title" placeholder="Enter announcement title">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="announcement-message" placeholder="Enter your announcement"></textarea>
+                </div>
+                <button class="btn" onclick="sendAnnouncement()">Send Announcement</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function sendAnnouncement() {
+            const year = document.getElementById('announcement-year').value;
+            const title = document.getElementById('announcement-title').value;
+            const message = document.getElementById('announcement-message').value;
+
+            if (!title || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const announcement = {
+                yearGroup: `Year ${year}`,
+                title: title,
+                message: message,
+                sender: currentStaff.name,
+                timestamp: new Date().toLocaleString()
+            };
+
+            // Send to Discord webhook
+            sendToDiscord('https://discord.com/api/webhooks/1419321024448565369/qCbyNCBQ3t9ZOt3gSYdvIXn5JfQbwTW6uIR9Ejs03Sm6yS2E3uhWzE7BPTfJU0OSf7f7', {
+                content: `<@&${yearGroupRoles[year]}> **Year ${year} Announcement**`,
+                embeds: [{
+                    title: `📢 ${title}`,
+                    description: message,
+                    color: 0x1e3c72,
+                    fields: [
+                        { name: 'Year Group', value: `Year ${year}`, inline: true },
+                        { name: 'Sent by', value: currentStaff.name, inline: true },
+                        { name: 'Time', value: announcement.timestamp, inline: true }
+                    ],
+                    footer: {
+                        text: 'Oakwell Primary School'
+                    }
+                }]
+			});
+
+            alert('Announcement sent successfully!');
+            closeModal();
+        }
+
+        function showEventManagement() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>Event Management</h3>
+                <div class="form-group">
+                    <label>Event Title:</label>
+                    <input type="text" id="event-title" placeholder="Enter event title">
+                </div>
+                <div class="form-group">
+                    <label>Description:</label>
+                    <textarea id="event-description" placeholder="Enter event description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Location:</label>
+                    <input type="text" id="event-location" placeholder="Enter event location">
+                </div>
+                <div class="form-group">
+                    <label>Date:</label>
+                    <input type="date" id="event-date">
+                </div>
+                <div class="form-group">
+                    <label>Time:</label>
+                    <input type="time" id="event-time">
+                </div>
+                <button class="btn" onclick="createEvent()">Create Event</button>
+                <hr>
+                <h4>Current Events</h4>
+                <div id="current-events"></div>
+            `;
+            loadCurrentEvents();
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function createEvent() {
+            const title = document.getElementById('event-title').value;
+            const description = document.getElementById('event-description').value;
+            const location = document.getElementById('event-location').value;
+            const date = document.getElementById('event-date').value;
+            const time = document.getElementById('event-time').value;
+
+            if (!title || !description || !location || !date || !time) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const event = {
+                id: Date.now(),
+                title: title,
+                description: description,
+                location: location,
+                date: date,
+                time: time,
+                createdBy: currentStaff.name
+            };
+
+            globalData.events.push(event);
+            updateEventsPage();
+            loadCurrentEvents();
+            alert('Event created successfully!');
+            
+            // Clear form
+            document.getElementById('event-title').value = '';
+            document.getElementById('event-description').value = '';
+            document.getElementById('event-location').value = '';
+            document.getElementById('event-date').value = '';
+            document.getElementById('event-time').value = '';
+        }
+
+        function loadCurrentEvents() {
+            const container = document.getElementById('current-events');
+            if (container) {
+                container.innerHTML = '';
+                globalData.events.forEach(event => {
+                    const eventDiv = document.createElement('div');
+                    eventDiv.className = 'event-item';
+                    eventDiv.innerHTML = `
+                        <h5>${event.title}</h5>
+                        <p><strong>Date:</strong> ${event.date} at ${event.time}</p>
+                        <p><strong>Location:</strong> ${event.location}</p>
+                        <p>${event.description}</p>
+                        <button class="btn btn-danger" onclick="deleteEvent(${event.id})">Delete</button>
+                    `;
+                    container.appendChild(eventDiv);
+                });
+            }
+        }
+
+        function deleteEvent(eventId) {
+            globalData.events = globalData.events.filter(e => e.id !== eventId);
+            loadCurrentEvents();
+            updateEventsPage();
+            alert('Event deleted successfully!');
+        }
+
+        function updateEventsPage() {
+            const eventsContainer = document.getElementById('events-list');
+            eventsContainer.innerHTML = '';
+            globalData.events.forEach(event => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = 'event-item';
+                eventDiv.innerHTML = `
+                    <h4>${event.title}</h4>
+                    <p><strong>Date:</strong> ${event.date} at ${event.time}</p>
+                    <p><strong>Location:</strong> ${event.location}</p>
+                    <p>${event.description}</p>
+                `;
+                eventsContainer.appendChild(eventDiv);
+            });
+        }
+
+        function showTimetable() {
+            const modalBody = document.getElementById('modal-body');
+            const staffTimetable = globalData.timetables[currentStaff.username] || createDefaultTimetable();
+            
+            modalBody.innerHTML = `
+                <h3>My Timetable</h3>
+                <div class="timetable-grid">
+                    <div class="timetable-cell"><strong>Time</strong></div>
+                    <div class="timetable-cell"><strong>Monday</strong></div>
+                    <div class="timetable-cell"><strong>Tuesday</strong></div>
+                    <div class="timetable-cell"><strong>Wednesday</strong></div>
+                    <div class="timetable-cell"><strong>Thursday</strong></div>
+                    <div class="timetable-cell"><strong>Friday</strong></div>
+                    
+                    <div class="timetable-cell">09:00-10:00</div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.monday[0]}" onchange="updateTimetable('monday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.tuesday[0]}" onchange="updateTimetable('tuesday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.wednesday[0]}" onchange="updateTimetable('wednesday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.thursday[0]}" onchange="updateTimetable('thursday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.friday[0]}" onchange="updateTimetable('friday', 0, this.value)"></div>
+                    
+                    <div class="timetable-cell">10:00-11:00</div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.monday[1]}" onchange="updateTimetable('monday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.tuesday[1]}" onchange="updateTimetable('tuesday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.wednesday[1]}" onchange="updateTimetable('wednesday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.thursday[1]}" onchange="updateTimetable('thursday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.friday[1]}" onchange="updateTimetable('friday', 1, this.value)"></div>
+                    
+                    <div class="timetable-cell">11:30-12:30</div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.monday[2]}" onchange="updateTimetable('monday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.tuesday[2]}" onchange="updateTimetable('tuesday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.wednesday[2]}" onchange="updateTimetable('wednesday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.thursday[2]}" onchange="updateTimetable('thursday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.friday[2]}" onchange="updateTimetable('friday', 2, this.value)"></div>
+                    
+                    <div class="timetable-cell">13:30-14:30</div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.monday[3]}" onchange="updateTimetable('monday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.tuesday[3]}" onchange="updateTimetable('tuesday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.wednesday[3]}" onchange="updateTimetable('wednesday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.thursday[3]}" onchange="updateTimetable('thursday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.friday[3]}" onchange="updateTimetable('friday', 3, this.value)"></div>
+                    
+                    <div class="timetable-cell">14:30-15:30</div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.monday[4]}" onchange="updateTimetable('monday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.tuesday[4]}" onchange="updateTimetable('tuesday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.wednesday[4]}" onchange="updateTimetable('wednesday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.thursday[4]}" onchange="updateTimetable('thursday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${staffTimetable.friday[4]}" onchange="updateTimetable('friday', 4, this.value)"></div>
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function createDefaultTimetable() {
+            return {
+                monday: ['', '', '', '', ''],
+                tuesday: ['', '', '', '', ''],
+                wednesday: ['', '', '', '', ''],
+                thursday: ['', '', '', '', ''],
+                friday: ['', '', '', '', '']
+            };
+        }
+
+        function updateTimetable(day, period, value) {
+            if (!globalData.timetables[currentStaff.username]) {
+                globalData.timetables[currentStaff.username] = createDefaultTimetable();
+            }
+            globalData.timetables[currentStaff.username][day][period] = value;
+        }
+
+        function showCPOMS() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>CPOMS - Behavior Management</h3>
+                <div class="form-group">
+                    <label>Student Name:</label>
+                    <input type="text" id="cpoms-student" placeholder="Enter student name">
+                </div>
+                <div class="form-group">
+                    <label>Year Group:</label>
+                    <select id="cpoms-year">
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                        <option value="5">Year 5</option>
+                        <option value="6">Year 6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Action Type:</label>
+                    <select id="cpoms-action">
+                        <option value="add">Add Behavior Points</option>
+                        <option value="remove">Remove Behavior Points</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Points:</label>
+                    <input type="number" id="cpoms-points" placeholder="Number of points" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Reason:</label>
+                    <textarea id="cpoms-reason" placeholder="Reason for behavior points change"></textarea>
+                </div>
+                <button class="btn" onclick="submitCPOMS()">Submit to CPOMS</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function submitCPOMS() {
+            const student = document.getElementById('cpoms-student').value;
+            const year = document.getElementById('cpoms-year').value;
+            const action = document.getElementById('cpoms-action').value;
+            const points = document.getElementById('cpoms-points').value;
+            const reason = document.getElementById('cpoms-reason').value;
+
+            if (!student || !points || !reason) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const cpoms = {
+                student: student,
+                year: `Year ${year}`,
+                action: action,
+                points: points,
+                reason: reason,
+                staff: currentStaff.name,
+                timestamp: new Date().toLocaleString()
+            };
+
+            sendToDiscord('https://discord.com/api/webhooks/1419324431162937547/DO_QTeJzkiN4lghy7AZDIre3rODWRV9QMQscoWHH7DcgFWLiCrStmWSpyj-toqjEK0Aj', {
+                embeds: [{
+                    title: `⚠️ CPOMS Behavior Report`,
+                    description: `**Student:** ${student}\n**Year:** Year ${year}\n**Action:** ${action === 'add' ? 'Added' : 'Removed'} ${points} points\n**Reason:** ${reason}`,
+                    color: action === 'add' ? 0x4CAF50 : 0xf44336,
+                    fields: [
+                        { name: 'Reported by', value: currentStaff.name, inline: true },
+                        { name: 'Time', value: cpoms.timestamp, inline: true }
+                    ]
+                }]
+            });
+
+            alert('CPOMS report submitted successfully!');
+            closeModal();
+        }
+
+        function showFirstAid() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>First Aid Report</h3>
+                <div class="form-group">
+                    <label>Student Name:</label>
+                    <input type="text" id="firstaid-student" placeholder="Enter student name">
+                </div>
+                <div class="form-group">
+                    <label>Year Group:</label>
+                    <select id="firstaid-year">
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                        <option value="5">Year 5</option>
+                        <option value="6">Year 6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Incident Type:</label>
+                    <select id="firstaid-type">
+                        <option value="Minor Cut">Minor Cut</option>
+                        <option value="Bruise">Bruise</option>
+                        <option value="Headache">Headache</option>
+                        <option value="Stomach Ache">Stomach Ache</option>
+                        <option value="Bump/Knock">Bump/Knock</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Location of Incident:</label>
+                    <input type="text" id="firstaid-location" placeholder="Where did the incident occur?">
+                </div>
+                <div class="form-group">
+                    <label>Treatment Given:</label>
+                    <textarea id="firstaid-treatment" placeholder="Describe treatment provided"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Additional Notes:</label>
+                    <textarea id="firstaid-notes" placeholder="Any additional observations or notes"></textarea>
+                </div>
+                <button class="btn" onclick="submitFirstAid()">Submit First Aid Report</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function submitFirstAid() {
+            const student = document.getElementById('firstaid-student').value;
+            const year = document.getElementById('firstaid-year').value;
+            const type = document.getElementById('firstaid-type').value;
+            const location = document.getElementById('firstaid-location').value;
+            const treatment = document.getElementById('firstaid-treatment').value;
+            const notes = document.getElementById('firstaid-notes').value;
+
+            if (!student || !location || !treatment) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const firstAid = {
+                student: student,
+                year: `Year ${year}`,
+                type: type,
+                location: location,
+                treatment: treatment,
+                notes: notes,
+                staff: currentStaff.name,
+                timestamp: new Date().toLocaleString()
+            };
+
+            sendToDiscord('https://discord.com/api/webhooks/1419324597630931114/uvH9efVAEtPEsRElQ-C0K6PnEywtg7C7Ob0z3rNKITQnG2QigptAFvq53sDl2-eTcun1', {
+                embeds: [{
+                    title: `🏥 First Aid Report`,
+                    description: `**Student:** ${student}\n**Year:** Year ${year}\n**Incident Type:** ${type}\n**Location:** ${location}\n**Treatment:** ${treatment}${notes ? '\n**Notes:** ' + notes : ''}`,
+                    color: 0xFF9800,
+                    fields: [
+                        { name: 'Administered by', value: currentStaff.name, inline: true },
+                        { name: 'Time', value: firstAid.timestamp, inline: true }
+                    ]
+                }]
+            });
+
+            alert('First Aid report submitted successfully!');
+            closeModal();
+        }
+
+        function showSafeguarding() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>Safeguarding Report</h3>
+                <div class="form-group">
+                    <label>Student Name:</label>
+                    <input type="text" id="safeguarding-student" placeholder="Enter student name">
+                </div>
+                <div class="form-group">
+                    <label>Year Group:</label>
+                    <select id="safeguarding-year">
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                        <option value="5">Year 5</option>
+                        <option value="6">Year 6</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Concern Type:</label>
+                    <select id="safeguarding-type">
+                        <option value="Physical">Physical Concern</option>
+                        <option value="Emotional">Emotional Concern</option>
+                        <option value="Neglect">Neglect Concern</option>
+                        <option value="Behavioral">Behavioral Concern</option>
+                        <option value="Disclosure">Student Disclosure</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Concern Details:</label>
+                    <textarea id="safeguarding-details" placeholder="Provide detailed information about the concern"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Action Taken:</label>
+                    <textarea id="safeguarding-action" placeholder="What action has been taken?"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Urgency Level:</label>
+                    <select id="safeguarding-urgency">
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Urgent">Urgent</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="submitSafeguarding()">Submit Safeguarding Report</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function submitSafeguarding() {
+            const student = document.getElementById('safeguarding-student').value;
+            const year = document.getElementById('safeguarding-year').value;
+            const type = document.getElementById('safeguarding-type').value;
+            const details = document.getElementById('safeguarding-details').value;
+            const action = document.getElementById('safeguarding-action').value;
+            const urgency = document.getElementById('safeguarding-urgency').value;
+
+            if (!student || !details || !action) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const safeguarding = {
+                student: student,
+                year: `Year ${year}`,
+                type: type,
+                details: details,
+                action: action,
+                urgency: urgency,
+                staff: currentStaff.name,
+                timestamp: new Date().toLocaleString()
+            };
+
+            const urgencyColor = {
+                'Low': 0x4CAF50,
+                'Medium': 0xFF9800,
+                'High': 0xFF5722,
+                'Urgent': 0xF44336
+            };
+
+            sendToDiscord('https://discord.com/api/webhooks/1419324724667879505/hRwFqEyByYUZd9VLzoIYLdyoTmcVDf_jOypV2Y0e5sEZncnnL7-FODRJFxKldP-ORxsI', {
+                embeds: [{
+                    title: `🛡️ Safeguarding Report - ${urgency} Priority`,
+                    description: `**Student:** ${student}\n**Year:** Year ${year}\n**Type:** ${type}\n**Details:** ${details}\n**Action Taken:** ${action}`,
+                    color: urgencyColor[urgency],
+                    fields: [
+                        { name: 'Reported by', value: currentStaff.name, inline: true },
+                        { name: 'Time', value: safeguarding.timestamp, inline: true },
+                        { name: 'Urgency', value: urgency, inline: true }
+                    ]
+                }]
+            });
+
+            alert('Safeguarding report submitted successfully!');
+            closeModal();
+        }
+
+        // SLT Functions
+        function showSLTLogin() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>SLT Access Login</h3>
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" id="slt-username" placeholder="Enter SLT username">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" id="slt-password" placeholder="Enter SLT password">
+                </div>
+                <button class="btn" onclick="loginSLT()">Login to SLT</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function loginSLT() {
+            const username = document.getElementById('slt-username').value;
+            const password = document.getElementById('slt-password').value;
+
+            if (username === 'OakwellPrimary' && password === 'SltIsPookie') {
+                closeModal();
+                showPage('slt-dashboard');
+            } else {
+                alert('Invalid SLT credentials');
+            }
+        }
+
+        function logoutSLT() {
+            showPage('staff-dashboard');
+        }
+
+        function showStaffDesktops() {
+            const modalBody = document.getElementById('modal-body');
+            let staffList = '';
+            
+            Object.keys(staffAccounts).forEach(username => {
+                const staff = staffAccounts[username];
+                staffList += `
+                    <div class="staff-card" onclick="viewStaffProfile('${username}')">
+                        <h4>${staff.name}</h4>
+                        <p>${staff.role}</p>
+                        <p>Username: ${username}</p>
+                    </div>
+                `;
+            });
+
+            modalBody.innerHTML = `
+                <h3>Staff Desktops</h3>
+                <div class="staff-grid">
+                    ${staffList}
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function viewStaffProfile(username) {
+            const staff = staffAccounts[username];
+            const timetable = globalData.timetables[username] || createDefaultTimetable();
+            const notes = globalData.staffNotes?.[username] || '';
+
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>${staff.name} - Profile Management</h3>
+                <p><strong>Role:</strong> ${staff.role}</p>
+                <p><strong>Username:</strong> ${username}</p>
+                
+                <h4>Timetable Management</h4>
+                <div class="timetable-grid">
+                    <div class="timetable-cell"><strong>Time</strong></div>
+                    <div class="timetable-cell"><strong>Monday</strong></div>
+                    <div class="timetable-cell"><strong>Tuesday</strong></div>
+                    <div class="timetable-cell"><strong>Wednesday</strong></div>
+                    <div class="timetable-cell"><strong>Thursday</strong></div>
+                    <div class="timetable-cell"><strong>Friday</strong></div>
+                    
+                    <div class="timetable-cell">09:00-10:00</div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.monday[0]}" onchange="updateStaffTimetable('${username}', 'monday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.tuesday[0]}" onchange="updateStaffTimetable('${username}', 'tuesday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.wednesday[0]}" onchange="updateStaffTimetable('${username}', 'wednesday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.thursday[0]}" onchange="updateStaffTimetable('${username}', 'thursday', 0, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.friday[0]}" onchange="updateStaffTimetable('${username}', 'friday', 0, this.value)"></div>
+                    
+                    <div class="timetable-cell">10:00-11:00</div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.monday[1]}" onchange="updateStaffTimetable('${username}', 'monday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.tuesday[1]}" onchange="updateStaffTimetable('${username}', 'tuesday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.wednesday[1]}" onchange="updateStaffTimetable('${username}', 'wednesday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.thursday[1]}" onchange="updateStaffTimetable('${username}', 'thursday', 1, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.friday[1]}" onchange="updateStaffTimetable('${username}', 'friday', 1, this.value)"></div>
+                    
+                    <div class="timetable-cell">11:30-12:30</div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.monday[2]}" onchange="updateStaffTimetable('${username}', 'monday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.tuesday[2]}" onchange="updateStaffTimetable('${username}', 'tuesday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.wednesday[2]}" onchange="updateStaffTimetable('${username}', 'wednesday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.thursday[2]}" onchange="updateStaffTimetable('${username}', 'thursday', 2, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.friday[2]}" onchange="updateStaffTimetable('${username}', 'friday', 2, this.value)"></div>
+                    
+                    <div class="timetable-cell">13:30-14:30</div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.monday[3]}" onchange="updateStaffTimetable('${username}', 'monday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.tuesday[3]}" onchange="updateStaffTimetable('${username}', 'tuesday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.wednesday[3]}" onchange="updateStaffTimetable('${username}', 'wednesday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.thursday[3]}" onchange="updateStaffTimetable('${username}', 'thursday', 3, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.friday[3]}" onchange="updateStaffTimetable('${username}', 'friday', 3, this.value)"></div>
+                    
+                    <div class="timetable-cell">14:30-15:30</div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.monday[4]}" onchange="updateStaffTimetable('${username}', 'monday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.tuesday[4]}" onchange="updateStaffTimetable('${username}', 'tuesday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.wednesday[4]}" onchange="updateStaffTimetable('${username}', 'wednesday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.thursday[4]}" onchange="updateStaffTimetable('${username}', 'thursday', 4, this.value)"></div>
+                    <div class="timetable-cell"><input type="text" value="${timetable.friday[4]}" onchange="updateStaffTimetable('${username}', 'friday', 4, this.value)"></div>
+                </div>
+                
+                <h4>Staff Notes</h4>
+                <div class="form-group">
+                    <textarea id="staff-notes-${username}" placeholder="Add notes for this staff member">${notes}</textarea>
+                </div>
+                <button class="btn" onclick="saveStaffNotes('${username}')">Save Notes</button>
+                <button class="btn" onclick="showStaffDesktops()">Back to Staff List</button>
+            `;
+        }
+
+        function updateStaffTimetable(username, day, period, value) {
+            if (!globalData.timetables[username]) {
+                globalData.timetables[username] = createDefaultTimetable();
+            }
+            globalData.timetables[username][day][period] = value;
+        }
+
+        function saveStaffNotes(username) {
+            if (!globalData.staffNotes) globalData.staffNotes = {};
+            const notes = document.getElementById(`staff-notes-${username}`).value;
+            globalData.staffNotes[username] = notes;
+            alert('Notes saved successfully!');
+        }
+
+        function showPasswordReset() {
+            const modalBody = document.getElementById('modal-body');
+            let staffOptions = '';
+            Object.keys(staffAccounts).forEach(username => {
+                staffOptions += `<option value="${username}">${staffAccounts[username].name} (${username})</option>`;
+            });
+
+            modalBody.innerHTML = `
+                <h3>Password Management</h3>
+                <div class="form-group">
+                    <label>Select Account Type:</label>
+                    <select id="account-type" onchange="updateAccountSelection()">
+                        <option value="staff">Staff Account</option>
+                        <option value="student">Student Account</option>
+                    </select>
+                </div>
+                
+                <div id="staff-selection">
+                    <div class="form-group">
+                        <label>Select Staff Member:</label>
+                        <select id="selected-staff">
+                            ${staffOptions}
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="student-selection" class="hidden">
+                    <div class="form-group">
+                        <label>Select Student:</label>
+                        <select id="selected-student">
+                            ${globalData.students.map(s => `<option value="${s.id}">${s.name} (${s.username})</option>`).join('')}
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>New Password:</label>
+                    <input type="password" id="new-password" placeholder="Enter new password">
+                </div>
+                <button class="btn" onclick="resetPassword()">Reset Password</button>
+                <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function updateAccountSelection() {
+            const type = document.getElementById('account-type').value;
+            if (type === 'staff') {
+                document.getElementById('staff-selection').classList.remove('hidden');
+                document.getElementById('student-selection').classList.add('hidden');
+            } else {
+                document.getElementById('staff-selection').classList.add('hidden');
+                document.getElementById('student-selection').classList.remove('hidden');
+            }
+        }
+
+        function resetPassword() {
+            const type = document.getElementById('account-type').value;
+            const newPassword = document.getElementById('new-password').value;
+
+            if (!newPassword) {
+                alert('Please enter a new password');
+                return;
+            }
+
+            if (type === 'staff') {
+                const username = document.getElementById('selected-staff').value;
+                staffAccounts[username].password = newPassword;
+                alert(`Password reset for ${staffAccounts[username].name}`);
+            } else {
+                const studentId = document.getElementById('selected-student').value;
+                const student = globalData.students.find(s => s.id == studentId);
+                if (student) {
+                    student.password = newPassword;
+                    alert(`Password reset for ${student.name}`);
+                }
+            }
+        }
+
+        function deleteAccount() {
+            const type = document.getElementById('account-type').value;
+            
+            if (!confirm('Are you sure you want to delete this account? This action cannot be undone.')) {
+                return;
+            }
+
+            if (type === 'staff') {
+                const username = document.getElementById('selected-staff').value;
+                const staffName = staffAccounts[username].name;
+                delete staffAccounts[username];
+                alert(`Account deleted for ${staffName}`);
+            } else {
+                const studentId = document.getElementById('selected-student').value;
+                const student = globalData.students.find(s => s.id == studentId);
+                if (student) {
+                    const studentName = student.name;
+                    globalData.students = globalData.students.filter(s => s.id != studentId);
+                    globalData.tickets = globalData.tickets.filter(t => t.studentId != studentId);
+                    alert(`Account deleted for ${studentName}`);
+                }
+            }
+            showPasswordReset(); // Refresh the interface
+        }
+
+        function showAllStudents() {
+            const modalBody = document.getElementById('modal-body');
+            let studentsList = '';
+            
+            globalData.students.forEach(student => {
+                studentsList += `
+                    <div class="ticket-item">
+                        <h5>${student.name}</h5>
+                        <p><strong>Username:</strong> ${student.username}</p>
+                        <p><strong>Year Group:</strong> Year ${student.year}</p>
+                        <p><strong>Tickets:</strong> ${globalData.tickets.filter(t => t.studentId === student.id).length}</p>
+                    </div>
+                `;
+            });
+
+            modalBody.innerHTML = `
+                <h3>All Student Accounts</h3>
+                <p><strong>Total Students:</strong> ${globalData.students.length}</p>
+                <div class="tickets-list">
+                    ${studentsList || '<p>No student accounts found.</p>'}
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function showSupportTickets() {
+            const modalBody = document.getElementById('modal-body');
+            let ticketsList = '';
+            
+            globalData.tickets.forEach(ticket => {
+                ticketsList += `
+                    <div class="ticket-item">
+                        <h5>${ticket.subject} (${ticket.supportID})</h5>
+                        <p><strong>Student:</strong> ${ticket.studentName}</p>
+                        <p><strong>Status:</strong> ${ticket.status}</p>
+                        <p><strong>Created:</strong> ${ticket.created}</p>
+                        <p>${ticket.message}</p>
+                        <div class="form-group">
+                            <input type="text" id="reply-${ticket.id}" placeholder="Type your reply...">
+                            <button class="btn" onclick="replyToTicket('${ticket.id}')">Reply</button>
+                            <button class="btn btn-danger" onclick="closeTicket('${ticket.id}')">Close Ticket</button>
+                        </div>
+                        ${ticket.replies.length > 0 ? '<h6>Previous Replies:</h6>' : ''}
+                        ${ticket.replies.map(reply => `<p><strong>${reply.staff}:</strong> ${reply.message} <small>(${reply.time})</small></p>`).join('')}
+                    </div>
+                `;
+            });
+
+            modalBody.innerHTML = `
+                <h3>Support Tickets Management</h3>
+                <p><strong>Total Tickets:</strong> ${globalData.tickets.length}</p>
+                <div class="tickets-list">
+                    ${ticketsList || '<p>No support tickets found.</p>'}
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function replyToTicket(ticketId) {
+            const replyText = document.getElementById(`reply-${ticketId}`).value;
+            if (!replyText) {
+                alert('Please enter a reply');
+                return;
+            }
+
+            const ticket = globalData.tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                ticket.replies.push({
+                    staff: 'SLT Staff',
+                    message: replyText,
+                    time: new Date().toLocaleString()
+                });
+                document.getElementById(`reply-${ticketId}`).value = '';
+                showSupportTickets(); // Refresh the view
+            }
+        }
+
+        function closeTicket(ticketId) {
+            const ticket = globalData.tickets.find(t => t.id === ticketId);
+            if (ticket) {
+                ticket.status = 'Closed';
+                showSupportTickets(); // Refresh the view
+            }
+        }
+
+        function showCreateProfiles() {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <h3>Create New Profiles</h3>
+                
+                <div style="display: flex; gap: 20px;">
+                    <div style="flex: 1;">
+                        <h4>Create Student Profile</h4>
+                        <div class="form-group">
+                            <label>Full Name:</label>
+                            <input type="text" id="new-profile-student-name" placeholder="Enter student name">
+                        </div>
+                        <div class="form-group">
+                            <label>Year Group:</label>
+                            <select id="new-profile-student-year">
+                                <option value="1">Year 1</option>
+                                <option value="2">Year 2</option>
+                                <option value="3">Year 3</option>
+                                <option value="4">Year 4</option>
+                                <option value="5">Year 5</option>
+                                <option value="6">Year 6</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Username:</label>
+                            <input type="text" id="new-profile-student-username" placeholder="Choose username">
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input type="password" id="new-profile-student-password" placeholder="Set password">
+                        </div>
+                        <button class="btn" onclick="createStudentProfile()">Create Student</button>
+                    </div>
+                    
+                    <div style="flex: 1;">
+                        <h4>Create Staff Profile</h4>
+                        <div class="form-group">
+                            <label>Full Name:</label>
+                            <input type="text" id="new-profile-staff-name" placeholder="Enter staff name">
+                        </div>
+                        <div class="form-group">
+                            <label>Role:</label>
+                            <input type="text" id="new-profile-staff-role" placeholder="Enter role/position">
+                        </div>
+                        <div class="form-group">
+                            <label>Username:</label>
+                            <input type="text" id="new-profile-staff-username" placeholder="Choose username">
+                        </div>
+                        <div class="form-group">
+                            <label>Password:</label>
+                            <input type="password" id="new-profile-staff-password" placeholder="Set password">
+                        </div>
+                        <button class="btn" onclick="createStaffProfile()">Create Staff</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('modal').style.display = 'block';
+        }
+
+        function createStudentProfile() {
+            const name = document.getElementById('new-profile-student-name').value;
+            const year = document.getElementById('new-profile-student-year').value;
+            const username = document.getElementById('new-profile-student-username').value;
+            const password = document.getElementById('new-profile-student-password').value;
+
+            if (!name || !username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (globalData.students.find(s => s.username === username)) {
+                alert('Username already exists');
+                return;
+            }
+
+            const student = {
+                id: Date.now(),
+                name: name,
+                year: year,
+                username: username,
+                password: password,
+                tickets: []
+            };
+
+            globalData.students.push(student);
+            alert('Student profile created successfully!');
+            
+            // Clear form
+            document.getElementById('new-profile-student-name').value = '';
+            document.getElementById('new-profile-student-username').value = '';
+            document.getElementById('new-profile-student-password').value = '';
+        }
+
+        function createStaffProfile() {
+            const name = document.getElementById('new-profile-staff-name').value;
+            const role = document.getElementById('new-profile-staff-role').value;
+            const username = document.getElementById('new-profile-staff-username').value;
+            const password = document.getElementById('new-profile-staff-password').value;
+
+            if (!name || !role || !username || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (staffAccounts[username]) {
+                alert('Username already exists');
+                return;
+            }
+
+            staffAccounts[username] = {
+                password: password,
+                name: name,
+                role: role
+            };
+
+            alert('Staff profile created successfully!');
+            
+            // Clear form
+            document.getElementById('new-profile-staff-name').value = '';
+            document.getElementById('new-profile-staff-role').value = '';
+            document.getElementById('new-profile-staff-username').value = '';
+            document.getElementById('new-profile-staff-password').value = '';
+        }
+
+        // Utility functions
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function sendToDiscord(webhook, data) {
+            fetch(webhook, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            }).catch(error => {
+                console.log('Discord webhook error:', error);
+                // Don't show error to user as webhooks might be blocked in some environments
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create some sample events
+            if (globalData.events.length === 0) {
+                globalData.events = [
+                    {
+                        id: 1,
+                        title: 'School Sports Day',
+                        description: 'Join us for our annual sports day celebration with activities for all year groups!',
+                        location: 'School Field',
+                        date: '2025-10-15',
+                        time: '10:00',
+                        createdBy: 'System'
+                    },
+                    {
+                        id: 2,
+                        title: 'Parent-Teacher Conferences',
+                        description: 'Schedule your appointment to discuss your child\'s progress with their teacher.',
+                        location: 'Main Hall',
+                        date: '2025-10-22',
+                        time: '16:00',
+                        createdBy: 'System'
+                    }
+                ];
+            }
+        });
+    </script>
+</body>
+</html>
